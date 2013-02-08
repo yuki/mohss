@@ -1,0 +1,7 @@
+--- #twitter config 
+twitter:
+    consumer_key: you_consumer_key
+    consumer_secret: your_consumer_secret
+    oauth_token: your_oauth_token
+    oauth_token_secret: your_ouath_token_secret
+    receiver: your_username
