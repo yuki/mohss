@@ -39,7 +39,9 @@ compiler and ruby-dev libraries
 
 I think you don't need anymore.
 
+You need to create a **config.yml** file with some needed configuration parameters. 
 After that, I execute mohss in a "screen" session to debug it.
+
     ./mohss.rb
 
 
