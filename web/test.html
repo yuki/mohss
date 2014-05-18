@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>MOHSS</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="jquery.mobile-1.4.2.min.css">
+    <link rel="shortcut icon" href="../favicon.ico">
+    <script src="jquery-2.1.1.min.js"></script>
+    <script src="jquery.mobile-1.4.2.min.js"></script>
+    <script src="socket.io.js"></script>
+</head>
+
+<body>
+    <div data-role="page" id="home">
+        <div data-role="header">
+            <h1>MoHSS</h1>
+            <a href="#home" data-icon="home" class="ui-btn-left">Home</a>
+            <a href="#logs" data-icon="bullets" class="ui-btn-right">Logs</a>
+        </div><!-- /header -->
+
+        <div class="ui-content" role="main">
+            <div class="ui-field-contain">
+                <label for="is_mohss_activated">Is MOHSS actived?</label>
+                <input type="checkbox" data-role="flipswitch" name="is_mohss_activated" id="is_mohss_activated">
+            </div>
+
+            <div class="ui-field-contain">
+                <label for="door_status">Door status</label>
+                <select name="door_status" id="door_status" data-role="slider">
+                    <option value=false>Closed</option>
+                    <option value=true>Open</option>
+                </select>
+            </div>
+        </div>
+
+    </div>
+    <div data-role="page" id="logs">
+        <div data-role="header">
+            <h1>MoHSS</h1>
+            <a href="#home" data-icon="home" class="ui-btn-left">Home</a>
+            <a href="#logs" data-icon="bullets" class="ui-btn-right">Logs</a>
+        </div><!-- /header -->
+
+            bla bla
+    </div>
+
+    <script>
+        var socket = io.connect('http://rugoli.no-ip.org:8000');
+        socket.on('connection', function (data) {
+            console.log(data);
+            if (data['door_status']) {
+                $("#door_status").val(data['door_status']).slider('refresh');
+            }
+            $("#is_mohss_activated").prop("checked",data['is_mohss_activated']).flipswitch( "refresh" );
+        });
+
+        socket.on('refresh', function (data) {
+            console.log(data);
+            if (data['door_status']) {
+                $("#door_status").val(data['door_status']).slider('refresh');
+            }
+            $("#is_mohss_activated").prop("checked",data['is_mohss_activated']).flipswitch( "refresh" );
+        });
+        $("#door_status").change(function() {
+                    socket.emit('changes', { door_status: $("#door_status").val() });
+        });
+        $("#is_mohss_activated").change(function() {
+            socket.emit('changes', { is_mohss_activated: $("#is_mohss_activated").prop("checked") });
+        });
+    </script>
+
+
+</body>
+</html>
