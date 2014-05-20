@@ -83,7 +83,7 @@ if __FILE__ == $PROGRAM_NAME
     send_tweet(receiver, "door closed") if activated
     led_off(ALARM)
     led_on(ACTIVATED)
-    contact_node("changes",{ door_status: 'false' }.to_json)
+    contact_node("changes",{ door_status: 'false' })
   end
 
   after :pin => DOOR, :goes => :down do
@@ -91,7 +91,7 @@ if __FILE__ == $PROGRAM_NAME
     send_tweet(receiver, "DOOR OPEN, INTRUSION!") if activated
     led_on(ALARM)
     led_off(ACTIVATED)
-    contact_node("changes",{ door_status: 'true' }.to_json)
+    contact_node("changes",{ door_status: 'true' })
   end
   #switch off alarm
   led_off(ALARM)
@@ -101,7 +101,7 @@ if __FILE__ == $PROGRAM_NAME
   #switch on system
   led_on(ACTIVATED)
 
-  client = SocketIO.connect("http://localhost:8000", sync:true) do
+  client = SocketIO.connect(MESSENGER_SOCKETIO_ADDRESS, sync:true) do
     before_start do
       on_event('changes') {
         |data| puts data.first

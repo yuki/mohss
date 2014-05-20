@@ -1,4 +1,5 @@
 var io = require('socket.io').listen(8000);
+io.set('log level', 1);
 var is_mohss_activated = true;
 var door_status = "false";
 

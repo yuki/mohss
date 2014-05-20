@@ -26,7 +26,7 @@
 
             <div class="ui-field-contain">
                 <label for="door_status">Door status</label>
-                <select name="door_status" id="door_status" data-role="slider">
+                <select name="door_status" id="door_status" data-role="slider" disabled="disabled">
                     <option value=false>Closed</option>
                     <option value=true>Open</option>
                 </select>
@@ -51,19 +51,21 @@
             if (data['door_status']) {
                 $("#door_status").val(data['door_status']).slider('refresh');
             }
-            $("#is_mohss_activated").prop("checked",data['is_mohss_activated']).flipswitch( "refresh" );
+            $("#is_mohss_activated").prop("checked",data['is_mohss_activated']).flipswitch('refresh');
         });
 
         socket.on('refresh', function (data) {
+            console.log(data);
+            if (typeof(data) != 'object'){
+                data=$.parseJSON(data);
+            }
             console.log(data);
             if (data['door_status']) {
                 $("#door_status").val(data['door_status']).slider('refresh');
             }
             $("#is_mohss_activated").prop("checked",data['is_mohss_activated']).flipswitch( "refresh" );
         });
-        $("#door_status").change(function() {
-                    socket.emit('changes', { door_status: $("#door_status").val() });
-        });
+
         $("#is_mohss_activated").change(function() {
             socket.emit('changes', { is_mohss_activated: $("#is_mohss_activated").prop("checked") });
         });
